@@ -11,12 +11,16 @@ TypoHero.enhance('Some text...')
 
 ## Features
 
-* Special character treatment for quotes and dashes
+* Special character treatment for quotes, dashes and ellipsis
 * Widon't with Unicode non-breaking space
-* Captial letters are wrapped in span.caps
-* Initial quotes are wrapped in span.quo
-* Ampersands are wrapped in span.amp
-* Some LaTeX commands are replaced with their Unicode counterpart
+* Skips special tags like `<script>`
+* Styling enhancements
+  * Captial letters are wrapped in `<span class="caps">`
+  * Initial quotes are wrapped in `<span class="quo">`
+  * Ampersands are wrapped in `<span class="amp">`
+* LaTeX support
+  * Some LaTeX commands are replaced by their Unicode counterpart
+  * Mathjax code is skipped
 
 ## Why?
 

@@ -9,12 +9,21 @@ TypoHero.enhance('Some text...')
 
 ![](https://raw.github.com/minad/typohero/master/hero.jpg)
 
+## Features
+
+* Special character treatment for quotes and dashes
+* Widon't with Unicode non-breaking space
+* Captial letters are wrapped in span.caps
+* Initial quotes are wrapped in span.quo
+* Ampersands are wrapped in span.amp
+* Some LaTeX commands are replaced with their Unicode counterpart
+
 ## Why?
 
 There is already SmartyPants, RubyPants, Typogruby, Typogrify, Fast-Aleck? So why?!
 
 * It is simpler, faster and more reliable than the others
-* Has more features (Find out yourself...)
+* More features
 * And I like regular expressions :)
 
 But why not improve the existing libraries?

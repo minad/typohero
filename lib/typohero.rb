@@ -7,7 +7,7 @@ module TypoHero
   EXCLUDED_TAGS = %w(head pre code kbd math script textarea)
   EXCLUDED_TAGS_RE = /\A<(\/)?(?:#{EXCLUDED_TAGS.join('|')})[\p{Space}\/>]/im
 
-  TOKENIZER_RE = /<[^>]+>|\\[\(\)\[\]]|\$\$|(?:[^<\$\\]|(?:[^$]|\A)\$|\\(?:[^\(\)\[\]]|\Z))+/im
+  TOKENIZER_RE = /<[^>]+>|\\[\(\)\[\]]|\$\$|(?:[^<\$\\]|\$(?:[^$]|\Z)|\\(?:[^\(\)\[\]]|\Z))+/im
 
   ESCAPE = {
     '\\\\'   => '&#92;',

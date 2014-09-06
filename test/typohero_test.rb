@@ -249,5 +249,7 @@ multiline
     typo '$$\\approx$$ outside \\approx', "$$\\approx$$ outside&nbsp;\u2248"
     typo '\\(\\approx\\) outside \\approx', "\\(\\approx\\) outside&nbsp;\u2248"
     typo '\\[\\approx\\] outside \\approx', "\\[\\approx\\] outside&nbsp;\u2248"
+    typo '<span>$</span>', '<span>$</span>'
+    typo '<span>\\</span>', '<span>\\</span>'
   end
 end

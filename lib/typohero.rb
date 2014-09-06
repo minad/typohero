@@ -1,6 +1,8 @@
-module TypoHero
-  VERSION = '0.0.1'
+# todo \b instead of $ \Z
+require 'typohero/version'
+require 'typohero/latex'
 
+module TypoHero
   extend self
 
   EXCLUDED_TAGS = %w(head pre code kbd math script textarea)
@@ -39,12 +41,6 @@ module TypoHero
     "''"       => RDQUO,
     '`'        => LSQUO,
     ',,'       => BDQUO,
-    '-&gt;'    => "\u2192",
-    '&lt;-'    => "\u2190",
-    '=&gt;'    => "\u21D2",
-    '&lt;='    => "\u21D0",
-    '&gt;&gt;' => "\u00BB",
-    '&lt;&lt;' => "\u00AB",
     '(c)'      => "\u00A9",
     '(C)'      => "\u00A9",
     '(r)'      => "\u00AE",
@@ -77,6 +73,7 @@ module TypoHero
     '&#x26;'   => '&amp;',
   }
   SPECIAL_RE = Regexp.union(*SPECIAL.keys)
+  LATEX_RE = /(#{Regexp.union *LATEX.keys})(?=\p{Space}|\b)/
 
   DASH_RE  = "[#{MDASH}#{NDASH}]"
   AMP_RE   = '&(?:amp;)?'
@@ -160,6 +157,7 @@ module TypoHero
         escape(s)
         primes(s)
         special(s)
+        latex(s)
         quotes(s, prev_last_char)
         dash_spaces(s)
         prev_last_char = last_char
@@ -212,6 +210,10 @@ module TypoHero
 
   def special(s)
     s.gsub!(SPECIAL_RE, SPECIAL)
+  end
+
+  def latex(s)
+    s.gsub!(LATEX_RE, LATEX)
   end
 
   def dash_spaces(s)

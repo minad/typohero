@@ -230,10 +230,6 @@ multiline
 
   def test_other_special
     typo ',,hello\'\'', "<span class=\"bdquo\">\u201E</span>hello&#8221;"
-    typo '&lt;&lt;', "\u00AB"
-    typo '&gt;&gt;', "\u00BB"
-    typo '-&gt;', "\u2192"
-    typo '&lt;-', "\u2190"
     typo '(tm)', "\u2122"
   end
 
@@ -243,5 +239,9 @@ multiline
 
   def test_ordinals
     typo 'I am the 1st', 'I am the&nbsp;1<sup>st</sup>'
+  end
+
+  def test_latex
+    typo '\\textbackslash', '\\'
   end
 end

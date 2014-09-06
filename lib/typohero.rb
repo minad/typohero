@@ -91,14 +91,14 @@ module TypoHero
   MDASH_SPACE_RE = /\p{Space}*(#{MDASH})\p{Space}*/
   NDASH_SPACE_RE = /\p{Space}*(#{NDASH})\p{Space}*/
 
-  REPLACE_AMP_RE  = /(?<=\p{Space})#{AMP_RE}(?=\p{Space})/m
+  REPLACE_AMP_RE = /(?<=\p{Space})#{AMP_RE}(?=\p{Space})/m
 
-  CAPS_BEGIN_RE   = "(^|\\p{Space}|#{LEFT_QUOTE_RE})"
-  CAPS_INNER_RE   = "(?:#{AMP_RE}|[A-Z\\d\\.]|#{RSQUO})*" # right quote for posession (e.g. JIMMY'S)
-  REPLACE_CAPS_RE = /#{CAPS_BEGIN_RE}([A-Z\d]#{CAPS_INNER_RE}[A-Z]#{CAPS_INNER_RE}|[A-Z]#{CAPS_INNER_RE}[A-Z\d]#{CAPS_INNER_RE})/m
+  CAPS_BEGIN_RE  = "(^|\\p{Space}|#{LEFT_QUOTE_RE})"
+  CAPS_INNER_RE  = "(?:#{AMP_RE}|[A-Z\\d\\.]|#{RSQUO})*" # right quote for posession (e.g. JIMMY'S)
+  CAPS_RE        = /#{CAPS_BEGIN_RE}([A-Z\d]#{CAPS_INNER_RE}[A-Z]#{CAPS_INNER_RE}|[A-Z]#{CAPS_INNER_RE}[A-Z\d]#{CAPS_INNER_RE})/m
 
   PUNCT_CLASS = '[!"#\$\%\'()*+,\-.\/:;<=>?\@\[\\\\\]\^_`{|}~]'
-  RIGHT_QUOTE_RE  = %r{
+  RIGHT_QUOTE_RE = %r{
     ^['"](?=#{PUNCT_CLASS})\B|                  # Very first character is a closing quote followed by punctuation at a non-word-break
     (?<!^|#{DASH_RE}|\p{Space}|[\[\{\(\-])['"]| # Not after dash, space or opening parentheses
     ['"](?=\p{Space}|$)|                        # Followed by space or end of line
@@ -238,7 +238,7 @@ module TypoHero
   end
 
   def caps(s)
-    s.gsub!(REPLACE_CAPS_RE, '\1<span class="caps">\2</span>')
+    s.gsub!(CAPS_RE, '\1<span class="caps">\2</span>')
   end
 
   def initial_quotes(s)

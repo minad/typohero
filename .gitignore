@@ -1,0 +1,9 @@
+*.swp
+*.gem
+Gemfile.lock
+.bundle
+.redcar
+.rvmrc
+.yardoc
+coverage
+pkg

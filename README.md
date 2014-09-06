@@ -2,10 +2,12 @@
 
 TypoHero enhances your typography. There are no options, there is no documentation.
 
-~~~
+~~~ ruby
 require 'typohero'
 TypoHero.enhance('Some text...')
 ~~~
+
+![](https://raw.github.com/minad/typohero/master/hero.jpg)
 
 ## Why?
 

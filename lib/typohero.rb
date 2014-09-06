@@ -4,7 +4,7 @@ module TypoHero
   extend self
 
   EXCLUDED_TAGS = %w(head pre code kbd math script textarea)
-  EXCLUDED_TAGS_RE = /\A<(\/)?(?:#{EXCLUDED_TAGS.join('|')})/im
+  EXCLUDED_TAGS_RE = /\A<(\/)?(?:#{EXCLUDED_TAGS.join('|')})[\s\/>]/im
 
   TOKENIZER_RE = /<[^>]+>|[^<]+|\\[\(\[\)\]]|\$\$/im
 

@@ -1,4 +1,3 @@
-# todo \b instead of $ \Z
 require 'typohero/version'
 require 'typohero/latex'
 
@@ -8,7 +7,7 @@ module TypoHero
   EXCLUDED_TAGS = %w(head pre code kbd math script textarea)
   EXCLUDED_TAGS_RE = /\A<(\/)?(?:#{EXCLUDED_TAGS.join('|')})[\p{Space}\/>]/im
 
-  TOKENIZER_RE = /<[^>]+>|[^<]+|\\[\(\[\)\]]|\$\$/im
+  TOKENIZER_RE = /<[^>]+>|\\[\(\)\[\]]|\$\$|(?:[^<\$\\]|(?:[^$]|\A)\$|\\(?:[^\(\)\[\]]|\Z))+/im
 
   ESCAPE = {
     '\\\\'   => '&#92;',
@@ -73,7 +72,7 @@ module TypoHero
     '&#x26;'   => '&amp;',
   }
   SPECIAL_RE = Regexp.union(*SPECIAL.keys)
-  LATEX_RE = /(#{Regexp.union *LATEX.keys})(?=\p{Space}|\b)/
+  LATEX_RE = /(#{Regexp.union *LATEX.keys})(?=\p{Space}|$)/
 
   DASH_RE  = "[#{MDASH}#{NDASH}]"
   AMP_RE   = '&(?:amp;)?'
@@ -97,8 +96,14 @@ module TypoHero
   REPLACE_CAPS_RE = /#{CAPS_BEGIN_RE}([A-Z\d]#{CAPS_INNER_RE}[A-Z]#{CAPS_INNER_RE}|[A-Z]#{CAPS_INNER_RE}[A-Z\d]#{CAPS_INNER_RE})/m
 
   PUNCT_CLASS = '[!"#\$\%\'()*+,\-.\/:;<=>?\@\[\\\\\]\^_`{|}~]'
-  PUNCT_QUOTE_RE  = /^['"](?=#{PUNCT_CLASS})\B/m
-  RIGHT_QUOTE_RE  = /(?<!^|#{DASH_RE}|\p{Space}|[\[\{\(\-])['"]|['"](?=\p{Space}|s\b|$)|(?<=#{DASH_RE})['"](?=#{PUNCT_CLASS})/m
+  RIGHT_QUOTE_RE  = %r{
+    ^['"](?=#{PUNCT_CLASS})\B|                  # Very first character is a closing quote followed by punctuation at a non-word-break
+    (?<!^|#{DASH_RE}|\p{Space}|[\[\{\(\-])['"]| # Not after dash, space or opening parentheses
+    ['"](?=\p{Space}|$)|                        # Followed by space or end of line
+    's\b|                                       # Apostrophe
+    (?<=#{DASH_RE})['"](?=#{PUNCT_CLASS})|      # Dash quote punctuation (e.g. --'!), for quotations
+    '(?=(\d\d(?:s|\p{Space}|$)))                # Decade abbreviations (the '80s)
+  }xm
 
   LEFT_QUOTES = {
     "'" => LSQUO,
@@ -248,17 +253,9 @@ module TypoHero
       return
     end
 
-    # Special case if the very first character is a closing
-    # quote followed by punctuation at a non-word-break
-    s.gsub!(PUNCT_QUOTE_RE, RIGHT_QUOTES)
-
     # Special case for double sets of quotes, e.g.
     #   <p>He said, "'Quoted' words in a larger quote."</p>
     s.gsub!(/(?:"'|'")(?=\p{Word})/, TWO_QUOTES)
-
-    # Special case for decade abbreviations (the '80s)
-    s.gsub!(/'(?=(\d{2}(?:s|\p{Space}|$)))/, RIGHT_QUOTES)
-
     s.gsub!(RIGHT_QUOTE_RE, RIGHT_QUOTES)
     s.gsub!(/['"]/,         LEFT_QUOTES)
   end

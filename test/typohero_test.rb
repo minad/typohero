@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require 'typohero'
 
-class TypoheroTest < Minitest::Test
+class TypoHeroTest < Minitest::Test
   def typo(str, orig)
     # todo test recursive
     a = TypoHero.enhance(str)
@@ -243,5 +243,11 @@ multiline
 
   def test_latex
     typo '\\textbackslash', '\\'
+  end
+
+  def test_ignore_mathjax
+    typo '$$\\approx$$ outside \\approx', "$$\\approx$$ outside&nbsp;\u2248"
+    typo '\\(\\approx\\) outside \\approx', "\\(\\approx\\) outside&nbsp;\u2248"
+    typo '\\[\\approx\\] outside \\approx', "\\[\\approx\\] outside&nbsp;\u2248"
   end
 end

@@ -10,16 +10,17 @@ module TypoHero
   TOKENIZER_RE = /<[^>]+>|\\[\(\)\[\]]|\$\$|(?:[^<\$\\]|\$(?:[^$]|\Z)|\\(?:[^\(\)\[\]]|\Z))+/im
 
   ESCAPE = {
-    '\\\\'   => '&#92;',
-    '\"'     => '&#34;',
-    "\\\'"   => '&#39;',
-    '\.'     => '&#46;',
-    '\,'     => '&#44;',
-    '\-'     => '&#45;',
-    '\`'     => '&#96;',
-    '\('     => '&#40',
+    '\\\\'  => '&#92;',
+    '\"'    => '&#34;',
+    "\\'"   => '&#39;',
+    '\.'    => '&#46;',
+    '\,'    => '&#44;',
+    '\-'    => '&#45;',
+    '\`'    => '&#96;',
   }
+  UNESCAPE = Hash[ESCAPE.map {|k,v| [v,k[1..-1]] }]
   ESCAPE_RE = Regexp.union(*ESCAPE.keys)
+  UNESCAPE_RE = Regexp.union(*UNESCAPE.keys)
 
   NBSP  = "\u00a0"
   MDASH = "\u2014"
@@ -39,6 +40,7 @@ module TypoHero
     '``'       => LDQUO,
     "''"       => RDQUO,
     '`'        => LSQUO,
+    #'\''        => RSQUO, # needs more complex treatment
     ',,'       => BDQUO,
     '(c)'      => "\u00A9",
     '(C)'      => "\u00A9",
@@ -176,6 +178,7 @@ module TypoHero
       amp(s)
       caps(s)
       ordinals(s)
+      unescape(s)
     end
     tokens.join
   end
@@ -211,6 +214,10 @@ module TypoHero
 
   def escape(s)
     s.gsub!(ESCAPE_RE, ESCAPE)
+  end
+
+  def unescape(s)
+    s.gsub!(UNESCAPE_RE, UNESCAPE)
   end
 
   def special(s)

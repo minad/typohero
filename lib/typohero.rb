@@ -4,7 +4,7 @@ module TypoHero
   extend self
 
   EXCLUDED_TAGS = %w(head pre code kbd math script textarea)
-  EXCLUDED_TAGS_RE = /\A<(\/)?(?:#{EXCLUDED_TAGS.join('|')})[\s\/>]/im
+  EXCLUDED_TAGS_RE = /\A<(\/)?(?:#{EXCLUDED_TAGS.join('|')})[\p{Space}\/>]/im
 
   TOKENIZER_RE = /<[^>]+>|[^<]+|\\[\(\[\)\]]|\$\$/im
 
@@ -13,94 +13,109 @@ module TypoHero
     '\"'     => '&#34;',
     "\\\'"   => '&#39;',
     '\.'     => '&#46;',
+    '\,'     => '&#44;',
     '\-'     => '&#45;',
-    '\`'     => '&#96;'
+    '\`'     => '&#96;',
+    '\('     => '&#40',
   }
   ESCAPE_RE = Regexp.union(*ESCAPE.keys)
 
-  EM_DASH      = '&#8212;'
-  EN_DASH      = '&#8211;'
-  ELLIPSIS     = '&#8230;'
-  LEFT_DQUOTE  = '&#8220;'
-  RIGHT_DQUOTE = '&#8221;'
-  LEFT_QUOTE   = '&#8216;'
-  RIGHT_QUOTE  = '&#8217;'
+  NBSP  = "\u00a0"
+  MDASH = "\u2014"
+  NDASH = "\u2013"
+  LDQUO = "\u201C"
+  RDQUO = "\u201D"
+  LSQUO = "\u2018"
+  RSQUO = "\u2019"
+  BDQUO = "\u201E"
 
   SPECIAL = {
     # enhance!
-    '---'      => EM_DASH,
-    '--'       => EN_DASH,
-    '...'      => ELLIPSIS,
-    '. . .'    => ELLIPSIS,
-    '``'       => LEFT_DQUOTE,
-    "''"       => RIGHT_DQUOTE,
-    '`'        => LEFT_QUOTE,
-    ',,'       => '&#8222;',
-    '-&gt;'    => '&rarr;',
-    '&lt;-'    => '&larr;',
-    '=&gt;'    => '&rArr;',
-    '&lt;='    => '&lArr;',
-    '&gt;&gt;' => '&raquo;',
-    '&lt;&lt;' => '&laquo;',
-    '(c)'      => '&copy;',
-    '(C)'      => '&copy;',
-    '(r)'      => '&reg;',
-    '(R)'      => '&reg;',
-    '(tm)'     => '&trade;',
-    '(TM)'     => '&trade;',
+    '---'      => MDASH,
+    '--'       => NDASH,
+    '...'      => "\u2026",
+    '. . .'    => "\u2026",
+    '``'       => LDQUO,
+    "''"       => RDQUO,
+    '`'        => LSQUO,
+    ',,'       => BDQUO,
+    '-&gt;'    => "\u2192",
+    '&lt;-'    => "\u2190",
+    '=&gt;'    => "\u21D2",
+    '&lt;='    => "\u21D0",
+    '&gt;&gt;' => "\u00BB",
+    '&lt;&lt;' => "\u00AB",
+    '(c)'      => "\u00A9",
+    '(C)'      => "\u00A9",
+    '(r)'      => "\u00AE",
+    '(R)'      => "\u00AE",
+    '(tm)'     => "\u2122",
+    '(TM)'     => "\u2122",
     # normalize for further processing
-    '&ldquo;'  => LEFT_DQUOTE,
-    '&lsquo;'  => LEFT_QUOTE,
-    '&rdquo;'  => RIGHT_DQUOTE,
-    '&rsquo;'  => RIGHT_QUOTE,
-    '&#160;'   => '&nbsp',
-    '&#xA0;'   => '&nbsp',
-    '&#x2013;' => EN_DASH,
-    '&#x2014;' => EM_DASH,
-    '&mdash;'  => EM_DASH,
-    '&ndash;'  => EN_DASH,
+    '&ldquo;'  => LDQUO,
+    '&#8220;'  => LDQUO,
+    '&#x201C;' => LDQUO,
+    '&rdquo;'  => RDQUO,
+    '&#8221;'  => RDQUO,
+    '&#x201D;' => RDQUO,
+    '&lsquo;'  => LSQUO,
+    '&#8216;'  => LSQUO,
+    '&#x2018;' => LSQUO,
+    '&rsquo;'  => RSQUO,
+    '&#8217;'  => RSQUO,
+    '&#x2019;' => RSQUO,
+    '&#160;'   => NBSP,
+    '&#xA0;'   => NBSP,
+    '&nbsp;'   => NBSP,
+    '&ndash;'  => NDASH,
+    '&#x2013;' => NDASH,
+    '&#8211;'  => NDASH,
+    '&#x2014;' => MDASH,
+    '&mdash;'  => MDASH,
+    '&#8212;'  => MDASH,
     '&#38;'    => '&amp;',
     '&#x26;'   => '&amp;',
   }
   SPECIAL_RE = Regexp.union(*SPECIAL.keys)
 
-  SPACE_RE = '\s|&nbsp;|&#8201;'
-  DASH_RE  = '&#821[12];'
+  DASH_RE  = "[#{MDASH}#{NDASH}]"
   AMP_RE   = '&(?:amp;)?'
+  LEFT_QUOTE_RE = "[#{LDQUO}#{LSQUO}#{BDQUO}]"
 
-  PRIME_RE = /(?<=\d)(''?)(?=#{SPACE_RE}|\d|$)/
+  PRIME_RE = /(?<=\d)(''?)(?=\p{Space}|\d|$)/
   PRIMES = {
-   "'" => '&prime;',
-   "''" => '&Prime;',
+   "'"   => "\u2032",
+   "''"  => "\u2033",
+   "'''" => "\u2034",
   }
-  ORDINAL_RE = /(?<=\d)(st|nd|rd|th)(?=#{SPACE_RE}|$)/
+  ORDINAL_RE = /(?<=\d)(st|nd|rd|th)(?=\p{Space}|$)/
 
-  EM_DASH_SPACE_RE = /\s*(#{EM_DASH})\s*/
-  EN_DASH_SPACE_RE = /\s*(#{EN_DASH})\s*/
+  MDASH_SPACE_RE = /\p{Space}*(#{MDASH})\p{Space}*/
+  NDASH_SPACE_RE = /\p{Space}*(#{NDASH})\p{Space}*/
 
-  REPLACE_AMP_RE  = /(?<=#{SPACE_RE})#{AMP_RE}(?=#{SPACE_RE})/m
+  REPLACE_AMP_RE  = /(?<=\p{Space})#{AMP_RE}(?=\p{Space})/m
 
-  CAPS_BEGIN_RE   = "(^|#{SPACE_RE}|#{LEFT_DQUOTE}|#{LEFT_QUOTE})"
-  CAPS_INNER_RE   = "(?:#{AMP_RE}|[A-Z\\d\\.]|#{RIGHT_QUOTE})*" # right quote for posession (e.g. JIMMY'S)
+  CAPS_BEGIN_RE   = "(^|\\p{Space}|#{LEFT_QUOTE_RE})"
+  CAPS_INNER_RE   = "(?:#{AMP_RE}|[A-Z\\d\\.]|#{RSQUO})*" # right quote for posession (e.g. JIMMY'S)
   REPLACE_CAPS_RE = /#{CAPS_BEGIN_RE}([A-Z\d]#{CAPS_INNER_RE}[A-Z]#{CAPS_INNER_RE}|[A-Z]#{CAPS_INNER_RE}[A-Z\d]#{CAPS_INNER_RE})/m
 
   PUNCT_CLASS = '[!"#\$\%\'()*+,\-.\/:;<=>?\@\[\\\\\]\^_`{|}~]'
   PUNCT_QUOTE_RE  = /^['"](?=#{PUNCT_CLASS})\B/m
-  RIGHT_QUOTE_RE  = /(?<!^|#{DASH_RE}|#{SPACE_RE}|[\[\{\(\-])['"]|['"](?=\s|s\b|$)|(?<=#{DASH_RE})['"](?=#{PUNCT_CLASS})/m
+  RIGHT_QUOTE_RE  = /(?<!^|#{DASH_RE}|\p{Space}|[\[\{\(\-])['"]|['"](?=\p{Space}|s\b|$)|(?<=#{DASH_RE})['"](?=#{PUNCT_CLASS})/m
 
   LEFT_QUOTES = {
-    "'" => LEFT_QUOTE,
-    '"' => LEFT_DQUOTE,
+    "'" => LSQUO,
+    '"' => LDQUO,
   }
 
   RIGHT_QUOTES = {
-    "'" => RIGHT_QUOTE,
-    '"' => RIGHT_DQUOTE,
+    "'" => RSQUO,
+    '"' => RDQUO,
   }
 
   TWO_QUOTES = {
-    '"\'' => LEFT_DQUOTE + LEFT_QUOTE,
-    '\'"' => LEFT_QUOTE + LEFT_DQUOTE
+    '"\'' => LDQUO + LSQUO,
+    '\'"' => LSQUO + LDQUO
   }
 
   PARAGRAPH_RE = 'h[1-6]|p|li|dt|dd|div'
@@ -108,11 +123,13 @@ module TypoHero
 
   WIDONT_PARAGRAPH_RE = /\A<\/(?:#{PARAGRAPH_RE})>\Z/im
   WIDONT_INLINE_RE = /\A<\/?(?:#{INLINE_RE})[^>]*>\Z/im
+  WIDONT_NBSP_RE = /#{NBSP}|<|>/
 
-  INITIAL_QUOTE_RE = /(?=(?:<(?:#{PARAGRAPH_RE})[^>]*>|^)(?:<(?:#{INLINE_RE})[^>]*>|\s)*)&#(8216|8220);/
+  INITIAL_QUOTE_RE = /(?=(?:<(?:#{PARAGRAPH_RE})[^>]*>|^)(?:<(?:#{INLINE_RE})[^>]*>|\p{Space})*)#{LEFT_QUOTE_RE}/
   INITIAL_QUOTES = {
-    LEFT_QUOTE => "<span class=\"quo\">#{LEFT_QUOTE}</span>",
-    LEFT_DQUOTE => "<span class=\"dquo\">#{LEFT_DQUOTE}</span>",
+    LSQUO => "<span class=\"quo\">#{LSQUO}</span>",
+    LDQUO => "<span class=\"dquo\">#{LDQUO}</span>",
+    BDQUO => "<span class=\"bdquo\">#{BDQUO}</span>",
   }
 
   def tokenize(input)
@@ -166,12 +183,12 @@ module TypoHero
       if tokens[i] =~ WIDONT_PARAGRAPH_RE
         state = 1
       elsif tokens[i] !~ WIDONT_INLINE_RE
-        if tokens[i] =~ /&nbsp;|<|>/
+        if tokens[i] =~ WIDONT_NBSP_RE
           state = 0
         elsif state == 1 || state == 3
-          if tokens[i] =~ (state == 1 ? /(\S+)?(\s+)?(\S+\s*)\Z/m : /(\S+)?(\s+)(\S*)\Z/m)
+          if tokens[i] =~ (state == 1 ? /(\P{Space}+)?(\p{Space}+)?(\P{Space}+\p{Space}*)\Z/m : /(\P{Space}+)?(\p{Space}+)(\P{Space}*)\Z/m)
             if $1 && $2
-              tokens[i].replace "#{$`}#{$1}&nbsp;#{$3}"
+              tokens[i].replace "#{$`}#{$1}#{NBSP}#{$3}"
               state = 0
             elsif $2
               state = 2
@@ -180,8 +197,8 @@ module TypoHero
               state = 3
             end
           end
-        elsif state == 2 && tokens[i] =~ /(\S+\s*)\Z/m
-          widow.sub!(/\A\s*/, '&nbsp;')
+        elsif state == 2 && tokens[i] =~ /(\P{Space}+\p{Space}*)\Z/m
+          widow.sub!(/\A\p{Space}*/, NBSP)
           state = 0
         end
       end
@@ -198,8 +215,8 @@ module TypoHero
   end
 
   def dash_spaces(s)
-    s.gsub!(EM_DASH_SPACE_RE, '&#8201;\1&#8201;')
-    s.gsub!(EN_DASH_SPACE_RE, ' \1 ')
+    s.gsub!(MDASH_SPACE_RE, "\u2009\\1\u2009")
+    s.gsub!(NDASH_SPACE_RE, ' \1 ')
   end
 
   def amp(s)
@@ -225,7 +242,7 @@ module TypoHero
 
   def quotes(s, prev_last_char)
     if s =~ /\A['"]\Z/
-      s.replace(prev_last_char =~ /\S/ ? RIGHT_QUOTES[s] : LEFT_QUOTES[s])
+      s.replace(prev_last_char =~ /\P{Space}/ ? RIGHT_QUOTES[s] : LEFT_QUOTES[s])
       return
     end
 
@@ -238,7 +255,7 @@ module TypoHero
     s.gsub!(/(?:"'|'")(?=\p{Word})/, TWO_QUOTES)
 
     # Special case for decade abbreviations (the '80s)
-    s.gsub!(/'(?=(\d{2}(?:s|\s|$)))/, RIGHT_QUOTES)
+    s.gsub!(/'(?=(\d{2}(?:s|\p{Space}|$)))/, RIGHT_QUOTES)
 
     s.gsub!(RIGHT_QUOTE_RE, RIGHT_QUOTES)
     s.gsub!(/['"]/,         LEFT_QUOTES)

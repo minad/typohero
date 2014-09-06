@@ -9,6 +9,13 @@ class TypoheroTest < Minitest::Test
     #assert_equal a, b
     #c = Typogruby.improve(str)
     #puts "\nInput:     #{str}\nTypogruby: #{c}\nTypoHero:      #{a}\n" if a != c
+    orig = orig.gsub('&nbsp;', "\u00a0")
+    orig.gsub!('&#8211;', "\u2013")
+    orig.gsub!('&#8230;', "\u2026")
+    orig.gsub!('&#8220;', "\u201C")
+    orig.gsub!('&#8221;', "\u201D")
+    orig.gsub!('&#8216;', "\u2018")
+    orig.gsub!('&#8217;', "\u2019")
     assert_equal orig, a
   end
 
@@ -70,7 +77,7 @@ multiline
 
   def test_dashes
     typo "foo--bar", 'foo &#8211;&nbsp;bar'
-    typo "foo---bar", 'foo&#8201;&#8212;&#8201;bar'
+    typo "foo---bar", "foo\u2009\u2014&nbsp;bar"
   end
 
   def test_ellipses
@@ -222,16 +229,16 @@ multiline
   end
 
   def test_other_special
-    typo ',,hello\'\'', '&#8222;hello&#8221;'
-    typo '&lt;&lt;', '&laquo;'
-    typo '&gt;&gt;', '&raquo;'
-    typo '-&gt;', '&rarr;'
-    typo '&lt;-', '&larr;'
-    typo '(tm)', '&trade;'
+    typo ',,hello\'\'', "<span class=\"bdquo\">\u201E</span>hello&#8221;"
+    typo '&lt;&lt;', "\u00AB"
+    typo '&gt;&gt;', "\u00BB"
+    typo '-&gt;', "\u2192"
+    typo '&lt;-', "\u2190"
+    typo '(tm)', "\u2122"
   end
 
   def test_primes
-    typo "She's  6'2''", 'She&#8217;s&nbsp;6&prime;2&Prime;'
+    typo "She's  6'2''", "She&#8217;s&nbsp;6\u20322\u2033"
   end
 
   def test_ordinals

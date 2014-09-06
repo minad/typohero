@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'typohero/version'
 require 'typohero/latex'
 
@@ -74,13 +75,13 @@ module TypoHero
     '&#x26;'   => '&amp;',
   }
   SPECIAL_RE = Regexp.union(*SPECIAL.keys)
-  LATEX_RE = /(#{Regexp.union *LATEX.keys})(?=\p{Space}|$)/
+  LATEX_RE = /(#{Regexp.union *LATEX.keys})(?=\p{Space}|$)/m
 
   DASH_RE  = "[#{MDASH}#{NDASH}]"
   AMP_RE   = '&(?:amp;)?'
   LEFT_QUOTE_RE = "[#{LDQUO}#{LSQUO}#{BDQUO}]"
 
-  PRIME_RE = /(?<=\d)(''?)(?=\p{Space}|\d|$)/
+  PRIME_RE = /(?<=\d)(''?)(?=\p{Space}|\d|$)/m
   PRIMES = {
    "'"   => "\u2032",
    "''"  => "\u2033",
@@ -91,7 +92,7 @@ module TypoHero
   MDASH_SPACE_RE = /\p{Space}*(#{MDASH})\p{Space}*/
   NDASH_SPACE_RE = /\p{Space}*(#{NDASH})\p{Space}*/
 
-  REPLACE_AMP_RE = /(?<=\p{Space})#{AMP_RE}(?=\p{Space})/m
+  REPLACE_AMP_RE = /(?<=\p{Space})#{AMP_RE}(?=\p{Space})/
 
   CAPS_BEGIN_RE  = "(^|\\p{Space}|#{LEFT_QUOTE_RE})"
   CAPS_INNER_RE  = "(?:#{AMP_RE}|[A-Z\\d\\.]|#{RSQUO})*" # right quote for posession (e.g. JIMMY'S)
@@ -129,7 +130,7 @@ module TypoHero
   WIDONT_INLINE_RE = /\A<\/?(?:#{INLINE_RE})[^>]*>\Z/im
   WIDONT_NBSP_RE = /#{NBSP}|<|>/
 
-  INITIAL_QUOTE_RE = /(?=(?:<(?:#{PARAGRAPH_RE})[^>]*>|^)(?:<(?:#{INLINE_RE})[^>]*>|\p{Space})*)#{LEFT_QUOTE_RE}/
+  INITIAL_QUOTE_RE = /(?=(?:<(?:#{PARAGRAPH_RE})[^>]*>|^)(?:<(?:#{INLINE_RE})[^>]*>|\p{Space})*)#{LEFT_QUOTE_RE}/m
   INITIAL_QUOTES = {
     LSQUO => "<span class=\"quo\">#{LSQUO}</span>",
     LDQUO => "<span class=\"dquo\">#{LDQUO}</span>",

@@ -136,6 +136,7 @@ multiline
     assert_typo %q{foo\#bar}, "foo\\#bar"
     assert_typo %q{foo\*bar}, "foo\\*bar"
     assert_typo %q{foo\&bar}, "foo\\&bar"
+    assert_typo %q{foo\\\theta}, "foo\\theta"
   end
 
   def test_should_replace_amps

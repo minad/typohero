@@ -218,7 +218,7 @@ module TypoHero
     out
   end
 
-  def enhance(input, html: true, latex: true)
+  def enhance(input)
     tokens, text, prev_last_char = [], []
     tokenize(input) do |s, type|
       if type == :text
@@ -226,7 +226,7 @@ module TypoHero
         escape(s)
         primes(s)
         special(s)
-        latex(s) if latex
+        latex(s)
         quotes(s, prev_last_char)
         dash_spaces(s)
         prev_last_char = last_char

@@ -264,7 +264,8 @@ module TypoHero
         if tokens[i] =~ WIDONT_NBSP_RE
           state = 0
         elsif state == 1 || state == 3
-          if tokens[i] =~ (state == 1 ? /(\P{Space}+)?(\p{Space}+)?(\P{Space}+\p{Space}*)\Z/m : /(\P{Space}+)?(\p{Space}+)(\P{Space}*)\Z/m)
+          if tokens[i] =~ (state == 1 ? /(\P{Space}+)?(\p{Space}+)?(\P{Space}+\p{Space}*)\Z/m :
+                                        /(\P{Space}+)?(\p{Space}+)(\P{Space}*)\Z/m)
             if $1 && $2
               tokens[i].replace "#{$`}#{$1}#{NBSP}#{$3}"
               state = 0

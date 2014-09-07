@@ -199,7 +199,7 @@ module TypoHero
           max_words -= words.size
         end
       else
-        if s =~ /\A<(\/)?([^\p{Space}]+).*>/m
+        if s =~ /\A<(\/)?([^\p{Space}\/>]+)/
           if $1
             until tags.pop == $2; end
           else
@@ -214,9 +214,7 @@ module TypoHero
 
   def strip_tags(input)
     out = ''
-    tokenize(input) do |s, type|
-      out << s if type == :text || type == :latex
-    end
+    tokenize(input) {|s, type| out << s if type == :text || type == :latex }
     out
   end
 

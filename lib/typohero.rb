@@ -73,7 +73,7 @@ module TypoHero
   AMP_RE   = '&(?:amp;)?'
   LEFT_QUOTE_RE = "[#{LDQUO}#{LSQUO}#{BDQUO}]"
 
-  PRIME_RE = /(?<=\d)(''?)(?=\p{Space}|\d|$)/m
+  PRIME_RE = /(?<=\d)(''?)(?=[\p{Space}\dNEWS]|$)/m
   PRIMES = {
    "'"   => "\u2032",
    "''"  => "\u2033",

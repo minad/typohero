@@ -244,6 +244,7 @@ multiline
 
   def test_primes
     assert_typo "She's  6'2''", "She&#8217;s&nbsp;6\u20322\u2033"
+    assert_typo %{He said "Oslo coordinates are: 59°57'N 10°45'E" and there it is.}, "He said &#8220;Oslo coordinates are: 59°57\u2032N 10°45\u2032E&#8221; and there it&nbsp;is."
   end
 
   def test_ordinals

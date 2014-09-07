@@ -1,10 +1,12 @@
 # TypoHero
 
-TypoHero enhances your typography. There are no options, there is no documentation.
+TypoHero enhances your typography. There are no options, there is no documentation. He knows what you want.
 
 ~~~ ruby
 require 'typohero'
 TypoHero.enhance('Some text...')
+TypoHero.truncate('Long text with tags...', max_words)
+TypoHero.strip_tags('Text with tags...')
 ~~~
 
 ![](https://raw.github.com/minad/typohero/master/hero.jpg)

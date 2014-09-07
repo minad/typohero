@@ -140,27 +140,51 @@ module TypoHero
   def tokenize(input)
     excluded, latex, dollar = 0, 0, 0
     input.scan TOKENIZER_RE do |s|
-      text = false
-      case s
-      when /\A</
-        excluded += ($1 ? -1 : 1) if s =~ EXCLUDED_TAGS_RE
-      when /\A\\[\(\[]\Z/
-        latex += 1
-      when /\A\\[\)\]]\Z/
-        latex -= 1
-      when '$$'
-        dollar += 1
-      else
-        text = latex == 0 && dollar.even? && excluded == 0
+      type = nil
+
+      if latex == 0 && dollar.even?
+        if s=~ /\A</
+          if s =~ EXCLUDED_TAGS_RE
+            excluded += $1 ? -1 : 1
+            excluded = 0 if excluded < 0
+            type = :excluded
+          else
+            type = excluded == 0 ? :tag : :excluded
+          end
+        end
       end
-      yield(s, text)
+
+      if type == nil && excluded == 0
+        case s
+        when /\A\\[\(\[]\Z/
+          latex += 1
+          type = :latex
+        when /\A\\[\)\]]\Z/
+          latex -= 1 if latex > 0
+          type = :latex
+        when '$$'
+          dollar += 1
+          type = :latex
+        end
+      end
+
+      type ||=
+        if excluded != 0
+          :excluded
+        elsif latex != 0 || dollar.odd?
+          :latex
+        else
+          :text
+        end
+
+      yield(s, type)
     end
   end
 
   def truncate(input, max_words)
     out, tags = '', []
-    tokenize(input) do |s, t|
-      if t
+    tokenize(input) do |s, type|
+      if type == :text
         s =~ /\A(\p{Space}*)(.*)\Z/m
         out << $1
         words = $2.split(/\p{Space}+/)
@@ -188,10 +212,18 @@ module TypoHero
     out
   end
 
+  def strip_tags(input)
+    out = ''
+    tokenize(input) do |s, type|
+      out << s if type == :text || type == :latex
+    end
+    out
+  end
+
   def enhance(input, html: true, latex: true)
     tokens, text, prev_last_char = [], []
-    tokenize(input) do |s, t|
-      if t
+    tokenize(input) do |s, type|
+      if type == :text
         last_char = s[-1]
         escape(s)
         primes(s)

@@ -250,6 +250,8 @@ multiline
 
   def test_ignore_mathjax
     assert_typo '$$\\approx$$ outside \\approx', "$$\\approx$$ outside&nbsp;\u2248"
+    assert_typo '\) $$\\approx$$ outside \\approx', "\\) $$\\approx$$ outside&nbsp;\u2248"
+    assert_typo '\] $$\\approx$$ outside \\approx', "\\] $$\\approx$$ outside&nbsp;\u2248"
     assert_typo '\\(\\approx\\) outside \\approx', "\\(\\approx\\) outside&nbsp;\u2248"
     assert_typo '\\[\\approx\\] outside \\approx', "\\[\\approx\\] outside&nbsp;\u2248"
     assert_typo '<span>$</span>', '<span>$</span>'
@@ -261,5 +263,11 @@ multiline
     assert_equal "<a>a <span>b\u2026</span></a>", TypoHero.truncate('<a>a <span>b!?! c d</span> c</a>', 2)
     assert_equal "<a>a <span><script>b</script> c\u2026</span></a>", TypoHero.truncate('<a>a <span><script>b</script> c d</span> c</a>', 2)
     assert_equal "<p>Lorem ipsum dolor sit amet.</p>", TypoHero.truncate("<p>Lorem ipsum dolor sit amet.</p>", 5)
+  end
+
+  def test_strip_tags
+    assert_equal 'a b c d e', TypoHero.strip_tags('<a>a <span>b c d</span> e</a>')
+    assert_equal 'a  c d e', TypoHero.strip_tags('<a>a <span><script>b</script> c d</span> e</a>')
+    assert_equal 'a   \(latex\) text', TypoHero.strip_tags('a <script>\(a b c\)</script><a> <test> \(latex\) text')
   end
 end

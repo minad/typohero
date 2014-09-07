@@ -42,6 +42,7 @@ multiline
   def test_excluded
     assert_typo "<script>'hello'</script>", "<script>'hello'</script>"
     assert_typo "<!-- <a>'hello'</a> -->", "<!-- <a>'hello'</a> -->"
+    assert_typo "<![CDATA[<a>'hello'</a>]]>", "<![CDATA[<a>'hello'</a>]]>"
   end
 
   def test_quotes

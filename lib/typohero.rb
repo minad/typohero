@@ -9,13 +9,15 @@ module TypoHero
   EXCLUDED_TAGS_RE = /\A<(\/)?(?:#{EXCLUDED_TAGS.join('|')})[\p{Space}\/>]/im
 
   TOKENIZER_RE = %r{
-    <!--(?:(?:(?!-->).)*)-->|# comment
-    <[^>]+>|                 # opening or closing tag
-    \\[\(\)\[\]]|            # latex begin/end
-    \$\$|                    # dollar latex begin/end
-    (?:[^<\$\\]|             # text without dollar or backslash
-    \$(?:[^$]|\Z)|           # single dollar
-    \\(?:[^\(\)\[\]]|\Z))+   # single backslash
+    <!--(?:(?:(?!-->).)*)-->|            # comment
+    <!\[CDATA\[(?:(?:(?!\]\]>).)*)\]\]>| # cdata
+    <[^>]+>|                             # opening or closing tag
+    \\[\(\)\[\]]|                        # latex begin/end
+    \$\$|                                # dollar latex begin/end
+    (?:[^<\$\\]|                         # text without dollar or backslash
+      \$(?:[^$]|\Z)|                     # single dollar
+      \\(?:[^\(\)\[\]]|\Z)               # single backslash
+    )+
   }xm
 
   ESCAPE = {
@@ -132,9 +134,14 @@ module TypoHero
   def tokenize(input)
     comment, excluded, latex, dollar = false, 0, 0, 0
     input.scan TOKENIZER_RE do |s|
-      type = s =~ /\A<!--/ ? :comment : nil
+      type =
+        if s =~ /\A<!--/
+          :comment
+        elsif s =~ /\A<!\[/
+          :cdata
+        end
 
-      if type == nil && latex == 0 && dollar.even?
+      if !type && latex == 0 && dollar.even?
         if s=~ /\A</
           if s =~ EXCLUDED_TAGS_RE
             excluded += $1 ? -1 : 1
@@ -146,7 +153,7 @@ module TypoHero
         end
       end
 
-      if type == nil && excluded == 0
+      if !type && excluded == 0
         case s
         when /\A\\[\(\[]\Z/
           latex += 1

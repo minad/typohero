@@ -39,6 +39,11 @@ multiline
 }
   end
 
+  def test_excluded
+    assert_typo "<script>'hello'</script>", "<script>'hello'</script>"
+    assert_typo "<!-- <a>'hello'</a> -->", "<!-- <a>'hello'</a> -->"
+  end
+
   def test_quotes
     assert_typo '"A first example"', '<span class="dquo">&#8220;</span>A first&nbsp;example&#8221;'
     assert_typo '"A first "nested" example"',

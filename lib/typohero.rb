@@ -8,7 +8,15 @@ module TypoHero
   EXCLUDED_TAGS = %w(head pre code kbd math script style textarea)
   EXCLUDED_TAGS_RE = /\A<(\/)?(?:#{EXCLUDED_TAGS.join('|')})[\p{Space}\/>]/im
 
-  TOKENIZER_RE = /<[^>]+>|\\[\(\)\[\]]|\$\$|(?:[^<\$\\]|\$(?:[^$]|\Z)|\\(?:[^\(\)\[\]]|\Z))+/m
+  TOKENIZER_RE = %r{
+    <!--(?:(?:(?!-->).)*)-->|# comment
+    <[^>]+>|                 # opening or closing tag
+    \\[\(\)\[\]]|            # latex begin/end
+    \$\$|                    # dollar latex begin/end
+    (?:[^<\$\\]|             # text without dollar or backslash
+    \$(?:[^$]|\Z)|           # single dollar
+    \\(?:[^\(\)\[\]]|\Z))+   # single backslash
+  }xm
 
   ESCAPE = {
     '\\\\'  => '&#92;',
@@ -122,11 +130,11 @@ module TypoHero
   }
 
   def tokenize(input)
-    excluded, latex, dollar = 0, 0, 0
+    comment, excluded, latex, dollar = false, 0, 0, 0
     input.scan TOKENIZER_RE do |s|
-      type = nil
+      type = s =~ /\A<!--/ ? :comment : nil
 
-      if latex == 0 && dollar.even?
+      if type == nil && latex == 0 && dollar.even?
         if s=~ /\A</
           if s =~ EXCLUDED_TAGS_RE
             excluded += $1 ? -1 : 1
@@ -168,11 +176,11 @@ module TypoHero
   def tokenize_with_tags(input)
     tags = []
     tokenize(input) do |s, type|
-      if s =~ /\A<(!)?(\/)?([^\p{Space}\/>]+)/ && !$1
-        if $2
-          until tags.empty? || tags.pop == $3; end
+      if type == :tag && s =~ /\A<(\/)?([^\p{Space}\/>]+)/
+        if $1
+          until tags.empty? || tags.pop == $2; end
         else
-          tags << $3
+          tags << $2
         end
       end
       yield(s, type, tags)

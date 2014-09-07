@@ -14,10 +14,7 @@ module TypoHero
     <[^>]+>|                             # opening or closing tag
     \\[\(\)\[\]]|                        # latex begin/end
     \$\$|                                # dollar latex begin/end
-    (?:[^<\$\\]|                         # text without dollar or backslash
-      \$(?:[^$]|\Z)|                     # single dollar
-      \\(?:[^\(\)\[\]]|\Z)               # single backslash
-    )+
+    (?:(?:(?!\$\$|\\[\(\)\[\]])[^<])+)   # text without double dollar or latex
   }xm
 
   ESCAPE = {

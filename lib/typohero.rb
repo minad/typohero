@@ -234,13 +234,13 @@ module TypoHero
       out.sub!(/[\p{Space}\p{Punct}]*\Z/, ELLIPSIS)
       tail << "</#{truncated.pop}>" until truncated.empty?
     end
-    out << tail
+    html_safe(input, out << tail)
   end
 
   def strip_tags(input)
     out = ''
     tokenize(input) {|s, type| out << s if type == :text || type == :latex }
-    out
+    html_safe(input, out)
   end
 
   def enhance(input)
@@ -268,7 +268,7 @@ module TypoHero
       ordinals(s)
       unescape(s)
     end
-    tokens.join
+    html_safe(input, tokens.join)
   end
 
   def widont(tokens)
@@ -299,6 +299,10 @@ module TypoHero
       end
       i -= 1
     end
+  end
+
+  def html_safe(src, dst)
+    src.respond_to?(:html_safe?) && src.html_safe? ? dst.html_safe : dst
   end
 
   def decode(s)

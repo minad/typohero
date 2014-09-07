@@ -27,6 +27,7 @@ TypoHero.strip_tags('Text with tags...')
 * `TypoHero.truncate` - Truncate which ensures that all tags are closed correctly
   * Supports maximum number of words and/or separator `String`/`Regexp`
 * `TypoHero.strip_tags` - Strip tags from content, keep only text
+* All methods keeps the string `html_safe?`
 
 ## Why?
 

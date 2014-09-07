@@ -46,14 +46,14 @@ But why not improve the existing libraries?
 
 ## Similar libraries
 
-[Smartypants (Perl)](http://daringfireball.net/projects/smartypants/)
-[Typogrify (Python)](https://github.com/mintchaos/typogrify)
-[Typography-Helper (Ruby)](https://code.google.com/p/typography-helper/)
-[RubyPants (Ruby)](http://chneukirchen.org/repos/rubypants/)
-[Tyogruby (Ruby)](http://avdgaag.github.io/typogruby/)
-[Typography (Ruby)](https://github.com/fxposter/typography)
-[Typographer (Ruby)](https://github.com/Slotos/typographer)
-[Typogrify (Ruby)](http://rubygems.org/gems/typogrify)
+[Smartypants (Perl)](http://daringfireball.net/projects/smartypants/),
+[Typogrify (Python)](https://github.com/mintchaos/typogrify),
+[Typography-Helper (Ruby)](https://code.google.com/p/typography-helper/),
+[RubyPants (Ruby)](http://chneukirchen.org/repos/rubypants/),
+[Tyogruby (Ruby)](http://avdgaag.github.io/typogruby/),
+[Typography (Ruby)](https://github.com/fxposter/typography),
+[Typographer (Ruby)](https://github.com/Slotos/typographer),
+[Typogrify (Ruby)](http://rubygems.org/gems/typogrify),
 [Typogrowth (Ruby)](https://github.com/mudasobwa/typogrowth)
 
 ## License

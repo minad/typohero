@@ -13,16 +13,19 @@ TypoHero.strip_tags('Text with tags...')
 
 ## Features
 
-* Special character treatment for quotes, dashes and ellipsis
-* Widon't with Unicode non-breaking space
-* Skips special tags like `<script>`
-* Styling enhancements
-  * Captial letters are wrapped in `<span class="caps">`
-  * Initial quotes are wrapped in `<span class="quo">`
-  * Ampersands are wrapped in `<span class="amp">`
-* LaTeX support
-  * Some LaTeX commands are replaced by their Unicode counterpart
-  * Mathjax code is skipped
+* `TypoHero.enhance` -  Typography enhancer
+  * Special character treatment for quotes, dashes and ellipsis
+  * Widon't with Unicode non-breaking space
+  * Skips special tags like `<script>`
+  * Styling enhancements
+    * Captial letters are wrapped in `<span class="caps">`
+    * Initial quotes are wrapped in `<span class="quo">`
+    * Ampersands are wrapped in `<span class="amp">`
+  * LaTeX support
+    * Some LaTeX commands are replaced by their Unicode counterpart
+    * Mathjax code is skipped
+* `TypoHero.truncate` - Truncate which ensures that all tags are closed correctly
+* `TypoHero.strip_tags` - Strip tags from content, keep only text
 
 ## Why?
 

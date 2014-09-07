@@ -52,28 +52,12 @@ module TypoHero
     '(TM)'     => "\u2122",
     # normalize for further processing
     '&ldquo;'  => LDQUO,
-    '&#8220;'  => LDQUO,
-    '&#x201C;' => LDQUO,
     '&rdquo;'  => RDQUO,
-    '&#8221;'  => RDQUO,
-    '&#x201D;' => RDQUO,
     '&lsquo;'  => LSQUO,
-    '&#8216;'  => LSQUO,
-    '&#x2018;' => LSQUO,
     '&rsquo;'  => RSQUO,
-    '&#8217;'  => RSQUO,
-    '&#x2019;' => RSQUO,
-    '&#160;'   => NBSP,
-    '&#xA0;'   => NBSP,
     '&nbsp;'   => NBSP,
     '&ndash;'  => NDASH,
-    '&#x2013;' => NDASH,
-    '&#8211;'  => NDASH,
-    '&#x2014;' => MDASH,
-    '&mdash;'  => MDASH,
-    '&#8212;'  => MDASH,
-    '&#38;'    => '&amp;',
-    '&#x26;'   => '&amp;',
+    '&mdash;'  => MDASH
   }
   SPECIAL_RE = Regexp.union(*SPECIAL.keys)
   LATEX_RE = /(#{Regexp.union *LATEX.keys})(?=\p{Space}|$)/m
@@ -223,6 +207,7 @@ module TypoHero
     tokenize(input) do |s, type|
       if type == :text
         last_char = s[-1]
+        decode(s)
         escape(s)
         primes(s)
         special(s)
@@ -271,6 +256,13 @@ module TypoHero
         end
       end
       i -= 1
+    end
+  end
+
+  def decode(s)
+    s.gsub!(/&#x([0-9A-F]+);|&#([0-9]+);/i) do
+      i = $1 ? $1.to_i(16) : $2.to_i(10)
+      i == 38 ? '&amp;' : i.chr('UTF-8')
     end
   end
 

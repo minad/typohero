@@ -255,4 +255,11 @@ multiline
     assert_typo '<span>$</span>', '<span>$</span>'
     assert_typo '<span>\\</span>', '<span>\\</span>'
   end
+
+  def test_truncate
+    assert_equal "<a>a <span>b\u2026</span></a>", TypoHero.truncate('<a>a <span>b c d</span> c</a>', 2)
+    assert_equal "<a>a <span>b\u2026</span></a>", TypoHero.truncate('<a>a <span>b!?! c d</span> c</a>', 2)
+    assert_equal "<a>a <span><script>b</script> c\u2026</span></a>", TypoHero.truncate('<a>a <span><script>b</script> c d</span> c</a>', 2)
+    assert_equal "<p>Lorem ipsum dolor sit amet.</p>", TypoHero.truncate("<p>Lorem ipsum dolor sit amet.</p>", 5)
+  end
 end

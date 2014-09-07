@@ -31,13 +31,14 @@ module TypoHero
   LSQUO = "\u2018"
   RSQUO = "\u2019"
   BDQUO = "\u201E"
+  ELLIPSIS = "\u2026"
 
   SPECIAL = {
     # enhance!
     '---'      => MDASH,
     '--'       => NDASH,
-    '...'      => "\u2026",
-    '. . .'    => "\u2026",
+    '...'      => ELLIPSIS,
+    '. . .'    => ELLIPSIS,
     '``'       => LDQUO,
     "''"       => RDQUO,
     '`'        => LSQUO,
@@ -98,13 +99,12 @@ module TypoHero
   CAPS_INNER_RE  = "(?:#{AMP_RE}|[A-Z\\d\\.]|#{RSQUO})*" # right quote for posession (e.g. JIMMY'S)
   CAPS_RE        = /#{CAPS_BEGIN_RE}([A-Z\d]#{CAPS_INNER_RE}[A-Z]#{CAPS_INNER_RE}|[A-Z]#{CAPS_INNER_RE}[A-Z\d]#{CAPS_INNER_RE})/m
 
-  PUNCT_CLASS = '[!"#\$\%\'()*+,\-.\/:;<=>?\@\[\\\\\]\^_`{|}~]'
   RIGHT_QUOTE_RE = %r{
-    ^['"](?=#{PUNCT_CLASS})\B|                  # Very first character is a closing quote followed by punctuation at a non-word-break
+    ^['"](?=\p{Punct})\B|                       # Very first character is a closing quote followed by punctuation at a non-word-break
     (?<!^|#{DASH_RE}|\p{Space}|[\[\{\(\-])['"]| # Not after dash, space or opening parentheses
     ['"](?=\p{Space}|$)|                        # Followed by space or end of line
     's\b|                                       # Apostrophe
-    (?<=#{DASH_RE})['"](?=#{PUNCT_CLASS})|      # Dash quote punctuation (e.g. --'!), for quotations
+    (?<=#{DASH_RE})['"](?=\p{Punct})|           # Dash quote punctuation (e.g. --'!), for quotations
     '(?=(\d\d(?:s|\p{Space}|$)))                # Decade abbreviations (the '80s)
   }xm
 
@@ -151,13 +151,44 @@ module TypoHero
       when '$$'
         dollar += 1
       else
-        text = true if latex == 0 && dollar.even? && excluded == 0
+        text = latex == 0 && dollar.even? && excluded == 0
       end
       yield(s, text)
     end
   end
 
-  def enhance(input)
+  def truncate(input, max_words)
+    out, tags = '', []
+    tokenize(input) do |s, t|
+      if t
+        s =~ /\A(\p{Space}*)(.*)\Z/m
+        out << $1
+        words = $2.split(/\p{Space}+/)
+        if words.size > max_words
+          out += words[0...max_words].join(' ')
+          out.sub!(/\p{Punct}+\Z/, '')
+          out << ELLIPSIS
+          out << "</#{tags.pop}>" until tags.empty?
+          break
+        else
+          out << s
+          max_words -= words.size
+        end
+      else
+        if s =~ /\A<(\/)?([^\p{Space}]+).*>/m
+          if $1
+            until tags.pop == $2; end
+          else
+            tags << $2
+          end
+        end
+        out << s
+      end
+    end
+    out
+  end
+
+  def enhance(input, html: true, latex: true)
     tokens, text, prev_last_char = [], []
     tokenize(input) do |s, t|
       if t
@@ -165,7 +196,7 @@ module TypoHero
         escape(s)
         primes(s)
         special(s)
-        latex(s)
+        latex(s) if latex
         quotes(s, prev_last_char)
         dash_spaces(s)
         prev_last_char = last_char

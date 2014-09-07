@@ -1,6 +1,6 @@
 # TypoHero
 
-TypoHero enhances your typography. There are no options, there is no documentation. He knows what you want.
+TypoHero has come to enhance your typography. There are no options, there is no documentation. He knows what you need.
 
 ~~~ ruby
 require 'typohero'

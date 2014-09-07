@@ -44,6 +44,18 @@ But why not improve the existing libraries?
 * Typogrify is Python
 * Fast-Aleck is C, but I don't want to use C since Ruby is already a perfect text processing language!
 
+## Similar libraries
+
+* [Smartypants (Perl)](http://daringfireball.net/projects/smartypants/)
+* [Typogrify (Python)](https://github.com/mintchaos/typogrify)
+* [Typography-Helper (Ruby)](https://code.google.com/p/typography-helper/)
+* [RubyPants (Ruby)](http://chneukirchen.org/repos/rubypants/)
+* [Tyogruby (Ruby)](http://avdgaag.github.io/typogruby/)
+* [Typography (Ruby)](https://github.com/fxposter/typography)
+* [Typographer (Ruby)](https://github.com/Slotos/typographer)
+* [Typogrify (Ruby)](http://rubygems.org/gems/typogrify)
+* [Typogrowth (Ruby)](https://github.com/mudasobwa/typogrowth)
+
 ## License
 
 ~~~

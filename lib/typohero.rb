@@ -165,35 +165,48 @@ module TypoHero
     end
   end
 
-  def truncate(input, max_words)
-    out, tags = '', []
+  def tokenize_with_tags(input)
+    tags = []
     tokenize(input) do |s, type|
-      if type == :text
-        s =~ /\A(\p{Space}*)(.*)\Z/m
-        out << $1
-        words = $2.split(/\p{Space}+/)
-        if words.size > max_words
-          out += words[0...max_words].join(' ')
-          out.sub!(/\p{Punct}+\Z/, '')
-          out << ELLIPSIS
-          out << "</#{tags.pop}>" until tags.empty?
-          break
+      if s =~ /\A<(!)?(\/)?([^\p{Space}\/>]+)/ && !$1
+        if $2
+          until tags.empty? || tags.pop == $3; end
         else
-          out << s
-          max_words -= words.size
+          tags << $3
         end
+      end
+      yield(s, type, tags)
+    end
+  end
+
+  def truncate(input, max_words)
+    out, tail, truncated = '', '', false
+    tokenize_with_tags(input) do |s, type, tags|
+      if max_words == 0
+        if type == :text
+          truncated = tags
+          break
+        end
+        tail << s
       else
-        if s =~ /\A<(\/)?([^\p{Space}\/>]+)/
-          if $1
-            until tags.pop == $2; end
-          else
-            tags << $2
+        if type == :text
+          s =~ /\A(\p{Space}*)(.*)\Z/m
+          ws, words = $1, $2.split(/\p{Space}+/)
+          if words.size > max_words
+            out << ws << words[0...max_words].join(' ')
+            truncated = tags
+            break
           end
+          max_words -= words.size
         end
         out << s
       end
     end
-    out
+    if truncated
+      out.sub!(/[\p{Space}\p{Punct}]*\Z/, ELLIPSIS)
+      tail << "</#{truncated.pop}>" until truncated.empty?
+    end
+    out << tail
   end
 
   def strip_tags(input)

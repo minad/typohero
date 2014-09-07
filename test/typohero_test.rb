@@ -272,6 +272,14 @@ multiline
     assert_equal "<!--comment-->a <span>b\u2026</span>", TypoHero.truncate('<!--comment-->a <span>b </span>c', 2)
     assert_equal "<a>a <span><script>b</script> c\u2026</span></a>", TypoHero.truncate('<a>a <span><script>b</script> c d</span> c</a>', 2)
     assert_equal "<p>Lorem ipsum dolor sit amet.</p>", TypoHero.truncate("<p>Lorem ipsum dolor sit amet.</p>", 5)
+    assert_equal "<p>Lorem ipsum\u2026</p>", TypoHero.truncate("<p>Lorem ipsum dolor sit amet.</p>", 5, 'dolor')
+    assert_equal "<p>Lorem ipsum dolor\u2026</p>", TypoHero.truncate("<p>Lorem ipsum dolor<!--more--> sit amet.</p>", 5, 'more')
+    assert_equal "<p>Lorem ipsum dolor\u2026</p>", TypoHero.truncate("<p>Lorem ipsum dolor<!--more--> sit amet.</p>", 5, '<!--more-->')
+    assert_equal "<p>Lorem ipsum dolor\u2026</p>", TypoHero.truncate("<p>Lorem ipsum dolor<!--more--> sit amet.</p>", 5, /more/)
+    assert_equal "<p><span>Lorem ipsum dolor\u2026</span></p>", TypoHero.truncate("<p><span>Lorem ipsum dolor</span> sit amet.</p>", 5, '</span>')
+    assert_equal "<p>Lorem ipsum dolor\u2026</p>", TypoHero.truncate("<p>Lorem ipsum dolor<span class=\"more\"> sit amet.</span></p>", 5, 'more')
+    assert_equal "<p>Lorem ipsum dolor\u2026</p>", TypoHero.truncate("<p>Lorem ipsum dolor<span class=\"more\"> sit amet.</span></p>", 'more', 10)
+    assert_equal "<p>Lorem ipsum\u2026</p>", TypoHero.truncate("<p>Lorem ipsum dolor<span class=\"more\"> sit amet.</span></p>", 'more', 2)
   end
 
   def test_strip_tags

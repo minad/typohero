@@ -191,25 +191,41 @@ module TypoHero
     end
   end
 
-  def truncate(input, max_words)
+  def truncate(input, *max_words_or_separator)
+    max_words = max_words_or_separator.select {|i| Fixnum === i }.first
+    if separator = max_words_or_separator.reject {|i| Fixnum === i }.first
+      separator = Regexp.union(*separator) unless Regexp === separator
+      separator = nil unless input =~ separator
+    end
     out, tail, truncated = '', '', false
     tokenize_with_tags(input) do |s, type, tags|
-      if max_words == 0
+      if separator && (type == :comment || type == :text || type == :latex || type == :tag) && separator === s
+        out << $` if type == :text
+        if type == :tag
+          if s =~ /\A<\//
+            tail << s
+          else
+            tags.pop
+          end
+        end
+        truncated = tags
+        break
+      elsif max_words == 0
         if type == :text
           truncated = tags
           break
         end
         tail << s
       else
-        if type == :text
+        if max_words && type == :text
           s =~ /\A(\p{Space}*)(.*)\Z/m
-          ws, words = $1, $2.split(/\p{Space}+/)
-          if words.size > max_words
-            out << ws << words[0...max_words].join(' ')
+          ws, w = $1, $2.split(/\p{Space}+/)
+          if w.size > max_words
+            out << ws << w[0...max_words].join(' ')
             truncated = tags
             break
           end
-          max_words -= words.size
+          max_words -= w.size
         end
         out << s
       end

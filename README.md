@@ -5,7 +5,7 @@ TypoHero enhances your typography. There are no options, there is no documentati
 ~~~ ruby
 require 'typohero'
 TypoHero.enhance('Some text...')
-TypoHero.truncate('Long text with tags...', max_words)
+TypoHero.truncate('Long text with tags...', max_words_or_separator)
 TypoHero.strip_tags('Text with tags...')
 ~~~
 
@@ -25,6 +25,7 @@ TypoHero.strip_tags('Text with tags...')
     * Some LaTeX commands are replaced by their Unicode counterpart
     * Mathjax code is skipped
 * `TypoHero.truncate` - Truncate which ensures that all tags are closed correctly
+  * Supports maximum number of words and/or separator `String`/`Regexp`
 * `TypoHero.strip_tags` - Strip tags from content, keep only text
 
 ## Why?

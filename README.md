@@ -54,7 +54,8 @@ But why not improve the existing libraries?
 [Typography (Ruby)](https://github.com/fxposter/typography),
 [Typographer (Ruby)](https://github.com/Slotos/typographer),
 [Typogrify (Ruby)](http://rubygems.org/gems/typogrify),
-[Typogrowth (Ruby)](https://github.com/mudasobwa/typogrowth)
+[Typogrowth (Ruby)](https://github.com/mudasobwa/typogrowth),
+...
 
 ## License
 

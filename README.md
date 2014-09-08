@@ -21,6 +21,7 @@ TypoHero.strip_tags('Text with tags...')
     * Captial letters are wrapped in `<span class="caps">`
     * Initial quotes are wrapped in `<span class="quo">`
     * Ampersands are wrapped in `<span class="amp">`
+  * Wrap hyphenated words in `<span class="nobr">`
   * LaTeX support
     * Some LaTeX commands are replaced by their Unicode counterpart
     * Mathjax code is skipped
@@ -56,6 +57,7 @@ But why not improve the existing libraries?
 [Typographer (Ruby)](https://github.com/Slotos/typographer),
 [Typogrify (Ruby)](http://rubygems.org/gems/typogrify),
 [Typogrowth (Ruby)](https://github.com/mudasobwa/typogrowth),
+[Richtypo.js (Javascript)](https://github.com/sapegin/richtypo.js)
 ...
 
 ## License

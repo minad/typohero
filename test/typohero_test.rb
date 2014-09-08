@@ -66,14 +66,14 @@ multiline
     assert_enhance 'pre"post', 'pre&#8221;post'
     assert_enhance 'pre "post', 'pre&nbsp;&#8220;post'
     assert_enhance 'pre&nbsp;"post', 'pre&nbsp;&#8220;post'
-    assert_enhance 'pre--"post', 'pre &#8211;&nbsp;&#8220;post'
-    assert_enhance 'pre--"!', 'pre &#8211;&nbsp;&#8221;!'
+    assert_enhance 'pre--"post', 'pre&nbsp;&#8211;&nbsp;&#8220;post'
+    assert_enhance 'pre--"!', 'pre&nbsp;&#8211;&nbsp;&#8221;!'
 
     assert_enhance "pre'post", 'pre&#8217;post'
     assert_enhance "pre 'post", 'pre&nbsp;&#8216;post'
     assert_enhance "pre&nbsp;'post", 'pre&nbsp;&#8216;post'
-    assert_enhance "pre--'post", 'pre &#8211;&nbsp;&#8216;post'
-    assert_enhance "pre--'!", 'pre &#8211;&nbsp;&#8217;!'
+    assert_enhance "pre--'post", 'pre&nbsp;&#8211;&nbsp;&#8216;post'
+    assert_enhance "pre--'!", 'pre&nbsp;&#8211;&nbsp;&#8217;!'
 
     assert_enhance "<b>'</b>", '<b><span class="quo">&#8216;</span></b>'
     assert_enhance "foo<b>'</b>", "foo<b>&#8217;</b>"
@@ -83,8 +83,9 @@ multiline
   end
 
   def test_dashes
-    assert_enhance "foo--bar", 'foo &#8211;&nbsp;bar'
-    assert_enhance "foo---bar", "foo\u2009\u2014&nbsp;bar"
+    assert_enhance "foo--bar", 'foo&nbsp;&#8211;&nbsp;bar'
+    assert_enhance "foo - bar", 'foo&nbsp;&#8211;&nbsp;bar'
+    assert_enhance "foo---bar", "foo\u202F\u2014\u202Fbar"
   end
 
   def test_ellipses
@@ -101,14 +102,14 @@ multiline
     assert_enhance "pre``post", 'pre&#8220;post'
     assert_enhance "pre ``post", 'pre&nbsp;&#8220;post'
     assert_enhance "pre&nbsp;``post", 'pre&nbsp;&#8220;post'
-    assert_enhance "pre--``post", 'pre &#8211;&nbsp;&#8220;post'
-    assert_enhance "pre--``!", 'pre &#8211;&nbsp;&#8220;!'
+    assert_enhance "pre--``post", 'pre&nbsp;&#8211;&nbsp;&#8220;post'
+    assert_enhance "pre--``!", 'pre&nbsp;&#8211;&nbsp;&#8220;!'
 
     assert_enhance "pre''post", 'pre&#8221;post'
     assert_enhance "pre ''post", 'pre&nbsp;&#8221;post'
     assert_enhance "pre&nbsp;''post", 'pre&nbsp;&#8221;post'
-    assert_enhance "pre--''post", 'pre &#8211;&nbsp;&#8221;post'
-    assert_enhance "pre--''!", 'pre &#8211;&nbsp;&#8221;!'
+    assert_enhance "pre--''post", 'pre&nbsp;&#8211;&nbsp;&#8221;post'
+    assert_enhance "pre--''!", 'pre&nbsp;&#8211;&nbsp;&#8221;!'
   end
 
   def test_single_backticks
@@ -117,14 +118,14 @@ multiline
     assert_enhance "pre`post", 'pre&#8216;post'
     assert_enhance "pre `post", 'pre&nbsp;&#8216;post'
     assert_enhance "pre&nbsp;`post", 'pre&nbsp;&#8216;post'
-    assert_enhance "pre--`post", 'pre &#8211;&nbsp;&#8216;post'
-    assert_enhance "pre--`!", 'pre &#8211;&nbsp;&#8216;!'
+    assert_enhance "pre--`post", 'pre&nbsp;&#8211;&nbsp;&#8216;post'
+    assert_enhance "pre--`!", 'pre&nbsp;&#8211;&nbsp;&#8216;!'
 
     assert_enhance "pre'post", 'pre&#8217;post'
     assert_enhance "pre 'post", 'pre&nbsp;&#8216;post'
     assert_enhance "pre&nbsp;'post", 'pre&nbsp;&#8216;post'
-    assert_enhance "pre--'post", 'pre &#8211;&nbsp;&#8216;post'
-    assert_enhance "pre--'!", 'pre &#8211;&nbsp;&#8217;!'
+    assert_enhance "pre--'post", 'pre&nbsp;&#8211;&nbsp;&#8216;post'
+    assert_enhance "pre--'!", 'pre&nbsp;&#8211;&nbsp;&#8217;!'
   end
 
   def test_process_escapes
@@ -254,6 +255,10 @@ multiline
 
   def test_latex
     assert_enhance '\\textbackslash', '\\'
+  end
+
+  def test_nobr
+    assert_enhance 'T-shirt', '<span class="nobr">T-shirt</span>'
   end
 
   def test_ignore_mathjax

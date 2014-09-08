@@ -31,6 +31,7 @@ module TypoHero
   UNESCAPE_RE = Regexp.union(*UNESCAPE.keys)
 
   NBSP  = "\u00a0"
+  NBSP_THIN = "\u202F"
   MDASH = "\u2014"
   NDASH = "\u2013"
   LDQUO = "\u201C"
@@ -42,6 +43,7 @@ module TypoHero
 
   SPECIAL = {
     # enhance!
+    ' - '      => " #{NDASH} ",
     '---'      => MDASH,
     '--'       => NDASH,
     '...'      => ELLIPSIS,
@@ -81,8 +83,10 @@ module TypoHero
   }
   ORDINAL_RE = /(?<=\d)(st|nd|rd|th)(?=\p{Space}|$)/
 
-  MDASH_SPACE_RE = /\p{Space}*(#{MDASH})\p{Space}*/
-  NDASH_SPACE_RE = /\p{Space}*(#{NDASH})\p{Space}*/
+  MDASH_SPACE_RE = /\p{Space}*#{MDASH}\p{Space}*/
+  NDASH_SPACE_RE = /\p{Space}*#{NDASH}\p{Space}*/
+  MDASH_SPACE = "#{NBSP_THIN}#{MDASH}#{NBSP_THIN}"
+  NDASH_SPACE = "#{NBSP}#{NDASH}#{NBSP}"
 
   REPLACE_AMP_RE = /(?<=\p{Space})#{AMP_RE}(?=\p{Space})/
 
@@ -119,7 +123,7 @@ module TypoHero
 
   WIDONT_PARAGRAPH_RE = /\A<\/(?:#{PARAGRAPH_RE})>\Z/im
   WIDONT_INLINE_RE = /\A<\/?(?:#{INLINE_RE})[^>]*>\Z/im
-  WIDONT_NBSP_RE = /#{NBSP}|<|>/
+  WIDONT_NBSP_RE = /[#{NBSP}#{NBSP_THIN}<>]/
 
   INITIAL_QUOTE_RE = /(?=(?:<(?:#{PARAGRAPH_RE})[^>]*>|^)(?:<(?:#{INLINE_RE})[^>]*>|\p{Space})*)#{LEFT_QUOTE_RE}/m
   INITIAL_QUOTES = {
@@ -266,6 +270,7 @@ module TypoHero
       amp(s)
       caps(s)
       ordinals(s)
+      nobr(s)
       unescape(s)
     end
     html_safe(input, tokens.join)
@@ -329,8 +334,8 @@ module TypoHero
   end
 
   def dash_spaces(s)
-    s.gsub!(MDASH_SPACE_RE, "\u2009\\1\u2009")
-    s.gsub!(NDASH_SPACE_RE, ' \1 ')
+    s.gsub!(MDASH_SPACE_RE, MDASH_SPACE)
+    s.gsub!(NDASH_SPACE_RE, NDASH_SPACE)
   end
 
   def amp(s)
@@ -343,6 +348,10 @@ module TypoHero
 
   def initial_quotes(s)
     s.gsub!(INITIAL_QUOTE_RE, INITIAL_QUOTES)
+  end
+
+  def nobr(s)
+    s.gsub!(/[\p{Digit}\p{Word}]+-[\p{Digit}\p{Word}]+/, '<span class="nobr">\0</span>')
   end
 
   def primes(s)

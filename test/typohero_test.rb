@@ -259,6 +259,7 @@ multiline
 
   def test_nobr
     assert_enhance 'T-shirt', '<span class="nobr">T-shirt</span>'
+    assert_enhance '2014-01-01', '<span class="nobr">2014-01-01</span>'
   end
 
   def test_ignore_mathjax

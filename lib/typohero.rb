@@ -351,7 +351,7 @@ module TypoHero
   end
 
   def nobr(s)
-    s.gsub!(/[\p{Digit}\p{Word}]+-[\p{Digit}\p{Word}]+/, '<span class="nobr">\0</span>')
+    s.gsub!(/[\p{Digit}\p{Word}]+(-[\p{Digit}\p{Word}]+)+/, '<span class="nobr">\0</span>')
   end
 
   def primes(s)

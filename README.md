@@ -57,7 +57,8 @@ But why not improve the existing libraries?
 [Typographer (Ruby)](https://github.com/Slotos/typographer),
 [Typogrify (Ruby)](http://rubygems.org/gems/typogrify),
 [Typogrowth (Ruby)](https://github.com/mudasobwa/typogrowth),
-[Richtypo.js (Javascript)](https://github.com/sapegin/richtypo.js)
+[Richtypo.js (Javascript)](https://github.com/sapegin/richtypo.js),
+[List of javascript typography libraries](https://github.com/yumyo/js-type-master)
 ...
 
 ## License

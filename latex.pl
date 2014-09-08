@@ -10,14 +10,14 @@ foreach (sort(keys(%WORDMAC))) {
     if (/^var/) {
 	my $x = $';
 	my $v = sprintf('\\u%04x', ord($WORDMAC{$_}));
-	print "   '\\$x' => \"$v\",\n";
+	print "    '\\$x' => \"$v\",\n";
     }
     my $v = sprintf('\\u%04x', ord($WORDMAC{$_}));
-    print "   '\\$_' => \"$v\",\n";
+    print "    '\\$_' => \"$v\",\n";
 }
 foreach (sort(keys(%NEGATEDSYMBOLS))) {
     my $v = sprintf('\\u%04x', ord($NEGATEDSYMBOLS{$_}));
-    print "   '\\not\\$_' => \"$v\",\n";
+    print "    '\\not\\$_' => \"$v\",\n";
 }
 
 print "  }\nend\n";

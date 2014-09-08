@@ -360,7 +360,7 @@ module TypoHero
   end
 
   def ordinals(s)
-    s.gsub!(ORDINAL_RE, '<sup>\1</sup>')
+    s.gsub!(ORDINAL_RE, '<span class="ord">\1</span>')
   end
 
   def quotes(s, prev_last_char)

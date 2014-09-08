@@ -21,6 +21,7 @@ TypoHero.strip_tags('Text with tags...')
     * Captial letters are wrapped in `<span class="caps">`
     * Initial quotes are wrapped in `<span class="quo">`
     * Ampersands are wrapped in `<span class="amp">`
+    * Ordinals are wrapped in `<span class="ord">`
   * Wrap hyphenated words in `<span class="nobr">`
   * LaTeX support
     * Some LaTeX commands are replaced by their Unicode counterpart

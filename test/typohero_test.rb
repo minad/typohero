@@ -250,7 +250,7 @@ multiline
   end
 
   def test_ordinals
-    assert_enhance 'I am the 1st', 'I am the&nbsp;1<sup>st</sup>'
+    assert_enhance 'I am the 1st', 'I am the&nbsp;1<span class="ord">st</span>'
   end
 
   def test_latex

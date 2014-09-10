@@ -27,8 +27,8 @@ module TypoHero
     '\`'    => '&#96;',
   }
   UNESCAPE = Hash[ESCAPE.map {|k,v| [v,k[1..-1]] }]
-  ESCAPE_RE = Regexp.union(*ESCAPE.keys)
-  UNESCAPE_RE = Regexp.union(*UNESCAPE.keys)
+  ESCAPE_RE = Regexp.union ESCAPE.keys
+  UNESCAPE_RE = Regexp.union UNESCAPE.keys
 
   NBSP  = "\u00a0"
   NBSP_THIN = "\u202F"
@@ -68,8 +68,8 @@ module TypoHero
     '&ndash;'  => NDASH,
     '&mdash;'  => MDASH
   }
-  SPECIAL_RE = Regexp.union(*SPECIAL.keys)
-  LATEX_RE = /(#{Regexp.union *LATEX.keys})(?=\p{Space}|$)/m
+  SPECIAL_RE = Regexp.union SPECIAL.keys
+  LATEX_RE = /(#{Regexp.union LATEX.keys})(?=\p{Space}|$)/m
 
   DASH_RE  = "[#{MDASH}#{NDASH}]"
   AMP_RE   = '&(?:amp;)?'
@@ -198,7 +198,7 @@ module TypoHero
   def truncate(input, *max_words_or_separator)
     max_words = max_words_or_separator.select {|i| Fixnum === i }.first
     if separator = max_words_or_separator.reject {|i| Fixnum === i }.first
-      separator = Regexp.union(*separator) unless Regexp === separator
+      separator = Regexp.union(separator) unless Regexp === separator
       separator = nil unless input =~ separator
     end
     out, tail, truncated = '', '', false

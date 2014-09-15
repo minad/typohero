@@ -83,7 +83,7 @@ module TypoHero
   }
   ORDINAL_RE = /(?<=\d)(st|nd|rd|th)(?=\p{Space}|$)/
 
-  UNITS_RE = /(?<=\p{Space}|^)(\d+(?:\.\d+)?)\p{Space}*([mk]?m|km\/h|m\/s|[m]?l)(?=\p{Space}|$)/
+  UNITS_RE = /(?<=\p{Space}|^)(\d+(?:\.\d+)?)\p{Space}*([mk]?m|km\/h|m\/s|[m]?l|[mk]g)(?=\p{Space}|$)/
   UNITS = "\\1#{NBSP_THIN}\\2"
 
   MDASH_SPACE_RE = /\p{Space}*#{MDASH}\p{Space}*/
@@ -94,7 +94,7 @@ module TypoHero
   REPLACE_AMP_RE = /(?<=\p{Space})#{AMP_RE}(?=\p{Space})/
 
   CAPS_BEGIN_RE  = "(^|\\p{Space}|#{LEFT_QUOTE_RE})"
-  CAPS_INNER_RE  = "(?:#{AMP_RE}|[A-Z\\d\\.]|#{RSQUO})*" # right quote for posession (e.g. JIMMY'S)
+  CAPS_INNER_RE  = "(?:#{AMP_RE}|[A-Z\\d\\.\-]|#{RSQUO})*" # right quote for posession (e.g. JIMMY'S)
   CAPS_RE        = /#{CAPS_BEGIN_RE}([A-Z\d]#{CAPS_INNER_RE}[A-Z]#{CAPS_INNER_RE}|[A-Z]#{CAPS_INNER_RE}[A-Z\d]#{CAPS_INNER_RE})/m
 
   RIGHT_QUOTE_RE = %r{

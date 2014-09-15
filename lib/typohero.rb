@@ -83,7 +83,7 @@ module TypoHero
   }
   ORDINAL_RE = /(?<=\d)(st|nd|rd|th)(?=\p{Space}|$)/
 
-  UNITS_RE = /(?<=\p{Space}|^)(\d+(?:\.\d+)?)\p{Space}*([mk]?m|km\/h|m\/s|[m]?l|[mk]g)(?=\p{Space}|$)/
+  UNITS_RE = /(?<=\p{Space}|^)(\d+(?:\.\d+)?)\p{Space}*([mk]?m|km\/h|m\/s|[m]?l|[mk]g)(?=\p{Space}|\p{Punct}|$)/
   UNITS = "\\1#{NBSP_THIN}\\2"
 
   MDASH_SPACE_RE = /\p{Space}*#{MDASH}\p{Space}*/
@@ -93,10 +93,6 @@ module TypoHero
 
   REPLACE_AMP_RE = /(?<=\p{Space})#{AMP_RE}(?=\p{Space})/
 
-  CAPS_BEGIN_RE  = "(^|\\p{Space}|#{LEFT_QUOTE_RE})"
-  CAPS_INNER_RE  = "(?:#{AMP_RE}|[A-Z\\d\\.\-]|#{RSQUO})*" # right quote for posession (e.g. JIMMY'S)
-  CAPS_RE        = /#{CAPS_BEGIN_RE}([A-Z\d]#{CAPS_INNER_RE}[A-Z]#{CAPS_INNER_RE}|[A-Z]#{CAPS_INNER_RE}[A-Z\d]#{CAPS_INNER_RE})/m
-
   RIGHT_QUOTE_RE = %r{
     ^['"](?=\p{Punct})\B|                       # Very first character is a closing quote followed by punctuation at a non-word-break
     (?<!^|#{DASH_RE}|\p{Space}|[\[\{\(\-])['"]| # Not after dash, space or opening parentheses
@@ -105,6 +101,9 @@ module TypoHero
     (?<=#{DASH_RE})['"](?=\p{Punct})|           # Dash quote punctuation (e.g. --'!), for quotations
     '(?=(\d\d(?:s|\p{Space}|$)))                # Decade abbreviations (the '80s)
   }xm
+
+  CAPS_INNER_RE  = "(?:#{AMP_RE}|[A-Z\\d\\.\-]|#{RSQUO})*" # right quote for posession (e.g. JIMMY'S)
+  CAPS_RE        = /(?<=^|\p{Space}|#{LEFT_QUOTE_RE})([A-Z\d]#{CAPS_INNER_RE}[A-Z]#{CAPS_INNER_RE}|[A-Z]#{CAPS_INNER_RE}[A-Z\d]#{CAPS_INNER_RE})(?=$|\p{Space}|#{RIGHT_QUOTE_RE}|\p{Punct})/m
 
   LEFT_QUOTES = {
     "'" => LSQUO,
@@ -347,7 +346,7 @@ module TypoHero
   end
 
   def caps(s)
-    s.gsub!(CAPS_RE, '\1<span class="caps">\2</span>')
+    s.gsub!(CAPS_RE, '<span class="caps">\1</span>')
   end
 
   def initial_quotes(s)

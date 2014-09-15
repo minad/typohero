@@ -83,6 +83,9 @@ module TypoHero
   }
   ORDINAL_RE = /(?<=\d)(st|nd|rd|th)(?=\p{Space}|$)/
 
+  UNITS_RE = /(?<=\p{Space}|^)(\d+(?:\.\d+)?)\p{Space}*([mk]?m|km\/h|m\/s|[m]?l)(?=\p{Space}|$)/
+  UNITS = "\\1#{NBSP_THIN}\\2"
+
   MDASH_SPACE_RE = /\p{Space}*#{MDASH}\p{Space}*/
   NDASH_SPACE_RE = /\p{Space}*#{NDASH}\p{Space}*/
   MDASH_SPACE = "#{NBSP_THIN}#{MDASH}#{NBSP_THIN}"
@@ -254,6 +257,7 @@ module TypoHero
         last_char = s[-1]
         decode(s)
         escape(s)
+        units(s)
         primes(s)
         special(s)
         latex(s)
@@ -374,5 +378,9 @@ module TypoHero
     s.gsub!(/(?:"'|'")(?=\p{Word})/, TWO_QUOTES)
     s.gsub!(RIGHT_QUOTE_RE, RIGHT_QUOTES)
     s.gsub!(/['"]/,         LEFT_QUOTES)
+  end
+
+  def units(s)
+    s.gsub!(UNITS_RE, UNITS)
   end
 end

@@ -253,6 +253,13 @@ multiline
     assert_enhance 'I am the 1st', 'I am the&nbsp;1<span class="ord">st</span>'
   end
 
+  def test_units
+    assert_enhance '1m', "1\u202Fm"
+    assert_enhance '1.2 m', "1.2\u202Fm"
+    assert_enhance 'text 1m text', "text 1\u202Fm text"
+    assert_enhance 'text 1.2 m text', "text 1.2\u202Fm text"
+  end
+
   def test_latex
     assert_enhance '\\textbackslash', '\\'
   end

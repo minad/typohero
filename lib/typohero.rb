@@ -83,7 +83,7 @@ module TypoHero
   }
   ORDINAL_RE = /(?<=\d)(st|nd|rd|th)(?=\p{Space}|$)/
 
-  UNITS_RE = /(?<=\p{Space}|^)(\d+(?:\.\d+)?)\p{Space}*([mk]?m|km\/h|m\/s|[m]?l|[mk]g)(?=\p{Space}|\p{Punct}|$)/
+  UNITS_RE = /(?<=\p{Space}|^)(-?\d+(?:\.\d+)?)\p{Space}*([mk]?m|km\/h|m\/s|[m]?l|[mk]g)(?=\p{Space}|\p{Punct}|$)/
   UNITS = "\\1#{NBSP_THIN}\\2"
 
   MDASH_SPACE_RE = /\p{Space}*#{MDASH}\p{Space}*/

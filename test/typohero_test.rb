@@ -255,6 +255,7 @@ multiline
   end
 
   def test_units
+    assert_enhance '-1m', "-1\u202Fm"
     assert_enhance '1m', "1\u202Fm"
     assert_enhance '100 m.', "100\u202Fm."
     assert_enhance '1.2 m', "1.2\u202Fm"

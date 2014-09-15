@@ -256,6 +256,8 @@ multiline
   def test_units
     assert_enhance '1m', "1\u202Fm"
     assert_enhance '1.2 m', "1.2\u202Fm"
+    assert_enhance '1.2 km', "1.2\u202Fkm"
+    assert_enhance '1.2 km/h', "1.2\u202Fkm/h"
     assert_enhance 'text 1m text', "text 1\u202Fm text"
     assert_enhance 'text 1.2 m text', "text 1.2\u202Fm text"
   end

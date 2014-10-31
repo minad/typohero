@@ -135,7 +135,7 @@ module TypoHero
   }
 
   def tokenize(input)
-    comment, excluded, latex, dollar = false, 0, 0, 0
+    excluded, latex, dollar = 0, 0, 0
     input.scan TOKENIZER_RE do |s|
       type =
         if s =~ /\A<!--/
@@ -354,7 +354,7 @@ module TypoHero
   end
 
   def nobr(s)
-    s.gsub!(/[\p{Digit}\p{Word}]+(-[\p{Digit}\p{Word}]+)+/, '<span class="nobr">\0</span>')
+    s.gsub!(/[\p{Word}]+(-[\p{Word}]+)+/, '<span class="nobr">\0</span>')
   end
 
   def primes(s)

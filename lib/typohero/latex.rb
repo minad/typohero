@@ -513,7 +513,6 @@ module TypoHero
     '\varphi' => "\u03c6",
     '\rho' => "\u03c1",
     '\varrho' => "\u03c1",
-    '\sigma' => "\u03c2",
     '\varsigma' => "\u03c2",
     '\theta' => "\u03b8",
     '\vartheta' => "\u03b8",

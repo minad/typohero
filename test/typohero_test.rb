@@ -44,6 +44,10 @@ multiline
     assert_enhance "<script>'hello'</script>", "<script>'hello'</script>"
     assert_enhance "<!-- <a>'hello'</a> -->", "<!-- <a>'hello'</a> -->"
     assert_enhance "<![CDATA[<a>'hello'</a>]]>", "<![CDATA[<a>'hello'</a>]]>"
+    assert_enhance "<pre> PRE doesn't\nget changed</pre>", "<pre> PRE doesn't\nget changed</pre>"
+    assert_enhance "<kbd> KBD doesn't\nget changed</kbd>", "<kbd> KBD doesn't\nget changed</kbd>"
+    assert_enhance "<code> CODE doesn't\nget changed</code>", "<code> CODE doesn't\nget changed</code>"
+    assert_enhance "<math> MATH doesn't\nget changed</math>", "<math> MATH doesn't\nget changed</math>"
   end
 
   def test_quotes

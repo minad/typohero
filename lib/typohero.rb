@@ -102,7 +102,7 @@ module TypoHero
     '(?=(\d\d(?:s|\p{Space}|$)))                # Decade abbreviations (the '80s)
   }xm
 
-  CAPS_INNER_RE  = "(?:#{AMP_RE}|[A-Z\\d/\\.\-]|#{RSQUO})*" # right quote for posession (e.g. JIMMY'S)
+  CAPS_INNER_RE  = "(?:#{AMP_RE}|[A-Z\\d/_\\.\-]|#{RSQUO})*" # right quote for posession (e.g. JIMMY'S)
   CAPS_RE        = /(?<=^|\p{Space}|#{LEFT_QUOTE_RE})([A-Z\d]#{CAPS_INNER_RE}[A-Z]#{CAPS_INNER_RE}|[A-Z]#{CAPS_INNER_RE}[A-Z\d]#{CAPS_INNER_RE})(?=$|\p{Space}|#{RIGHT_QUOTE_RE}|\p{Punct})/m
 
   LEFT_QUOTES = {

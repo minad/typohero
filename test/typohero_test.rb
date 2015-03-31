@@ -171,6 +171,7 @@ multiline
     assert_enhance 'Replace text <i>IN</i> tags', 'Replace text <i><span class="caps">IN</span></i>&nbsp;tags'
     assert_enhance 'AB, CD, EF', '<span class="caps">AB</span>, <span class="caps">CD</span>,&nbsp;<span class="caps">EF</span>'
     assert_enhance 'HTML/XHTML', '<span class="caps">HTML/XHTML</span>'
+    assert_enhance 'UNDERSCORE_DELIMITED_CAPS', '<span class="caps">UNDERSCORE_DELIMITED_CAPS</span>'
   end
 
   def test_should_ignore_special_case_caps

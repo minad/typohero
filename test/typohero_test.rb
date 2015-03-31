@@ -172,6 +172,8 @@ multiline
     assert_enhance 'AB, CD, EF', '<span class="caps">AB</span>, <span class="caps">CD</span>,&nbsp;<span class="caps">EF</span>'
     assert_enhance 'HTML/XHTML', '<span class="caps">HTML/XHTML</span>'
     assert_enhance 'UNDERSCORE_DELIMITED_CAPS', '<span class="caps">UNDERSCORE_DELIMITED_CAPS</span>'
+    assert_enhance '(WHEEE)', '(<span class="caps">WHEEE</span>)'
+    assert_enhance '&#8220;WHEEE&#8221;', '<span class="dquo">&#8220;</span><span class="caps">WHEEE</span>&#8221;'
   end
 
   def test_should_ignore_special_case_caps

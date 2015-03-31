@@ -74,6 +74,7 @@ module TypoHero
   DASH_RE  = "[#{MDASH}#{NDASH}]"
   AMP_RE   = '&(?:amp;)?'
   LEFT_QUOTE_RE = "[#{LDQUO}#{LSQUO}#{BDQUO}]"
+  LEFT_PAREN_RE = '[\(\[\{]'
 
   PRIME_RE = /(?<=\d)(''?)(?=[\p{Space}\dNEWS]|$)/m
   PRIMES = {
@@ -103,7 +104,7 @@ module TypoHero
   }xm
 
   CAPS_INNER_RE  = "(?:#{AMP_RE}|[A-Z\\d/_\\.\-]|#{RSQUO})*" # right quote for posession (e.g. JIMMY'S)
-  CAPS_RE        = /(?<=^|\p{Space}|#{LEFT_QUOTE_RE})([A-Z\d]#{CAPS_INNER_RE}[A-Z]#{CAPS_INNER_RE}|[A-Z]#{CAPS_INNER_RE}[A-Z\d]#{CAPS_INNER_RE})(?=$|\p{Space}|#{RIGHT_QUOTE_RE}|\p{Punct})/m
+  CAPS_RE        = /(?<=^|\p{Space}|#{LEFT_QUOTE_RE}|#{LEFT_PAREN_RE})([A-Z\d]#{CAPS_INNER_RE}[A-Z]#{CAPS_INNER_RE}|[A-Z]#{CAPS_INNER_RE}[A-Z\d]#{CAPS_INNER_RE})(?=$|\p{Space}|#{RIGHT_QUOTE_RE}|\p{Punct})/m
 
   LEFT_QUOTES = {
     "'" => LSQUO,
@@ -269,9 +270,9 @@ module TypoHero
     end
     widont(tokens)
     text.each do |s|
+      caps(s)
       initial_quotes(s)
       amp(s)
-      caps(s)
       ordinals(s)
       nobr(s)
       unescape(s)

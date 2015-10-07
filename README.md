@@ -18,7 +18,7 @@ TypoHero.strip_tags('Text with tags...')
   * Widon't with Unicode non-breaking space
   * Skips special tags like `<script>`
   * Styling enhancements
-    * Captial letters are wrapped in `<span class="caps">`
+    * Capital letters are wrapped in `<span class="caps">`
     * Initial quotes are wrapped in `<span class="quo">`
     * Ampersands are wrapped in `<span class="amp">`
     * Ordinals are wrapped in `<span class="ord">`
